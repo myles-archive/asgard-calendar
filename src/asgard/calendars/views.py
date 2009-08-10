@@ -1,36 +1,16 @@
-"""
-Copyright (C) 2008 Myles Braithwaite
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-	
-	http://www.apache.org/licenses/LICENSE-2.0
-	
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-"""
-
 import datetime
 import time
-
-try:
-	import vobject
-except ImportError:
-	vobject = None
 
 from django.http import Http404, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from asgard.calendar.models import Event
-from asgard.calendar.forms import CalendarYearMonthForm
-from asgard.utils.icalendar_feed import ICalendarFeed
+from asgard.calendars.models import Event
+from asgard.calendars.forms import CalendarYearMonthForm
 
-def calendar_month(request, year=str(datetime.date.today().year), month=datetime.date.today().strftime('%b').lower()):
+def calendar_month(request, year=str(datetime.date.today().year),
+	month=datetime.date.today().strftime('%b').lower()):
+	
 	if request.GET:
 		new_data = request.GET.copy()
 		form = CalendarYearMonthForm(new_data)
@@ -123,9 +103,11 @@ def calendar_month(request, year=str(datetime.date.today().year), month=datetime
 		'is_archive': True,
 	}
 	
-	return render_to_response('calendar/calendar_month.html', payload, context_instance=RequestContext(request))
+	return render_to_response('calendars/month.html', payload, context_instance=RequestContext(request))
 
-def calendar_week(request, year=str(datetime.date.today().year), week=str(datetime.date.today().isocalendar()[1])):
+def calendar_week(request, year=str(datetime.date.today().year),
+	week=str(datetime.date.today().isocalendar()[1])):
+	
 	try:
 		date = datetime.date(*time.strptime(year + '-0-' + week, '%Y-%w-%U')[:3])
 	except ValueError:
@@ -183,9 +165,28 @@ def calendar_week(request, year=str(datetime.date.today().year), week=str(dateti
 		'hours': hours,
 	}
 	
-	return render_to_response('calendar/calendar_week.html', context_payload, context_instance=RequestContext(request))
+	return render_to_response('calendars/week.html', context_payload, context_instance=RequestContext(request))
 
-def calendar_day(request, year=str(datetime.date.today().year), month=datetime.date.today().strftime('%b').lower(), day=str(datetime.date.today().day)):
+def calendar_year(request, year=str(datetime.date.today().year)):
+	events = Event.objects.filter(start_date__year=year)
+	
+	months = []
+	
+	for i in range(1, 13):
+		months += [datetime.date(int(year), i, 1),]
+	
+	context_payload = {
+		'events': events,
+		'months': months,
+		'year': year
+	}
+	
+	return render_to_response('calendars/year.html', context_payload, context_instance=RequestContext(request))
+
+def calendar_day(request, year=str(datetime.date.today().year),
+	month=datetime.date.today().strftime('%b').lower(),
+	day=str(datetime.date.today().day)):
+	
 	try:
 		date = datetime.date(*time.strptime(year+month+day, '%Y%b%d')[:3])
 	except ValueError:
@@ -233,7 +234,7 @@ def calendar_day(request, year=str(datetime.date.today().year), month=datetime.d
 		'is_archive': True,
 	}
 	
-	return render_to_response('calendar/calendar_day.html', context_payload, context_instance=RequestContext(request))
+	return render_to_response('calendars/day.html', context_payload, context_instance=RequestContext(request))
 
 def detail(request, year, month, day, slug):
 	try:
@@ -246,33 +247,4 @@ def detail(request, year, month, day, slug):
 	except IndexError:
 		raise Http404
 	
-	return render_to_response('calendar/detail.html', { 'event': event, 'date': date }, context_instance=RequestContext(request))
-
-def icalendar(request):
-	import vobject
-	cal = vobject.iCalendar()
-	cal.add('method').value = 'PUBLISH'
-	for event in Event.objects.all():
-		vevent = cal.add('vevent')
-		#vevent.add('uid').value = event.id
-		if event.start_time:
-			vevent.add('dtstart').value = datetime.datetime.combine(event.start_date, event.start_time)
-		else:
-			vevent.add('dtstart').value = event.start_date
-		
-		if event.end_time and event.end_date:
-			vevent.add('dtend').value = datetime.datetime.combine(event.end_date, event.end_time)
-		elif event.end_date:
-			vevent.add('dtend').value = event.end_date
-		
-		if event.cancel:
-			vevent.add('dtend').value = 'CANCELLED'
-		
-		vevent.add('summary').value = event.title
-	
-	icalstream = cal.serialize()
-	response = HttpResponse(icalstream, mimetype='text/calendar')
-	response['Filename'] = 'calendar.ics'  # IE needs this
-	response['Content-Disposition'] = 'attachment; filename=calendar.ics'
-	
-	return response
+	return render_to_response('calendars/detail.html', { 'event': event, 'date': date }, context_instance=RequestContext(request))

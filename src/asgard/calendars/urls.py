@@ -1,0 +1,32 @@
+from django.conf.urls.defaults import *
+
+urlpatterns = patterns('asgard.calendars.views',
+	url(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$',
+		view = 'detail',
+		name = 'calendar_event_detail',
+	),
+	url(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/$', 
+		view = 'calendar_day',
+		name = 'calendar_day',
+	),
+	url(r'^(?P<year>\d{4})/(?P<week>[1-9]{2})/$',
+		view = 'calendar_week',
+		name = 'calendar_week'
+	),
+	url(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/$',
+		view = 'calendar_month',
+		name = 'calendar_month',
+	),
+	url(r'^(?P<year>\d{4})/$',
+		view = 'calendar_year',
+		name = 'calendar_year',
+	),
+	url(r'^today/$',
+	    view = 'calendar_day',
+	    name = 'calendar_today'
+	),
+	url(r'^$',
+		view = 'calendar_month',
+		name = 'calendar_index',
+	),
+)

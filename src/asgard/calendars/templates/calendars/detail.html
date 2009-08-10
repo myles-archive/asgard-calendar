@@ -1,0 +1,42 @@
+{% extends "calendars/base_calendars.html" %}
+
+{% block title %}{{ block.super }}: {{ event.title }}{% endblock %}
+
+{% block content_title %}
+	<h2>{{ event.title }}</h2>
+{% endblock %}
+
+{% block content %}
+	{% load humanize %}
+
+	<table border="0">
+		<thead>
+			<tr>
+				<th colspan="2"><h3><a href="{{ event.get_absolute_url }}">{{ event.title }}</a></h3></th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td colspan="2">{{ event.body_html|safe }}</td>
+			</tr>
+		</tfoot>
+		<tbody>
+		<tr>
+			<th>Start</th>
+			<td>{{ event.start_date|naturalday|title }} {% if event.start_time %}{{ event.start_time|time:"P" }}{% endif %}</td>
+		</tr>
+		{% if event.end_date or event.end_time %}
+		<tr>
+			<th>End</th>
+			<td>{% if event.end_date %}{{ event.end_date|naturalday|title }}{% endif %} {{ event.end_time|time:"P" }}</td>
+		</tr>
+		{% endif %}
+		{% if event.length %}
+		<tr>
+			<th>Length</th>
+			<td>{{ event.length }}</td>
+		</tr>
+		{% endif %}
+		</tbody>
+	</table>
+{% endblock %}

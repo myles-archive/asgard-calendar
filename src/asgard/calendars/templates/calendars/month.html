@@ -1,0 +1,74 @@
+{% extends "calendars/base_calendars.html" %}
+
+{% block title %}{{ block.super }}: {{ month|date:"F Y" }}{% endblock %}
+
+{% block content %}
+	<table class="calendar">
+		<thead>
+			<tr>
+				<th colspan="2" class="prevDay">{% if prev_month %}<a href="{% url calendar_month prev_month.year prev_month|date:"b" %}">Previous Month</a>{% endif %}</th>
+				<th colspan="3" class="monthName"><h2>{{ month|date:"F" }}</h2></th>
+				<th colspan="2" class="nextDay">{% if next_month %}<a href="{% url calendar_month next_month.year next_month|date:"b" %}" class="next">Next Month</a>{% endif %}</th>
+			</tr>
+			<tr class="dayName">
+			{% for day in headers %}
+				<th scope="col"><span title="{{ day|date:"l" }}">{{ day|date:"l" }}</span></th>
+			{% endfor %}
+			</tr>
+		</thead>
+		<tfoot>
+			<tr class="dayName">
+			{% for day in headers %}
+				<th scope="col"><span title="{{ day|date:"l" }}">{{ day|date:"l" }}</span></th>
+			{% endfor %}
+			</tr>
+			<tr>
+				<th colspan="2" class="prevDay">{% if prev_month %}<a href="{% url calendar_month prev_month.year prev_month|date:"b" %}">Previous Month</a>{% endif %}</th>
+				<th colspan="3" class="monthName">
+					<!--<h2>{{ month|date:"F" }}</h2>-->
+					<form action="." method="get" accept-charset="utf-8"><p>
+						<select name="month" id="month">
+							<option value="jan" {% ifequal month.month 1 %}selected{% endifequal %}>January</option>
+							<option value="feb" {% ifequal month.month 2 %}selected{% endifequal %}>February</option>
+							<option value="mar" {% ifequal month.month 3 %}selected{% endifequal %}>March</option>
+							<option value="apr" {% ifequal month.month 4 %}selected{% endifequal %}>April</option>
+							<option value="may" {% ifequal month.month 5 %}selected{% endifequal %}>May</option>
+							<option value="jun" {% ifequal month.month 6 %}selected{% endifequal %}>June</option>
+							<option value="jul" {% ifequal month.month 7 %}selected{% endifequal %}>July</option>
+							<option value="aug" {% ifequal month.month 8 %}selected{% endifequal %}>August</option>
+							<option value="sep" {% ifequal month.month 9 %}selected{% endifequal %}>September</option>
+							<option value="oct" {% ifequal month.month 10 %}selected{% endifequal %}>October</option>
+							<option value="nov" {% ifequal month.month 11 %}selected{% endifequal %}>November</option>
+							<option value="dec" {% ifequal month.month 12 %}selected{% endifequal %}>December</option>
+						</select>
+						<select name="year" id="year">
+							{% for year in years %}
+							<option value="{{ year }}" {% ifequal year month.year %}selected{% endifequal %}>{{ year }}</option>
+							{% endfor %}
+						</select>
+						<input type="submit" value="Go">
+					</p></form>
+				</th>
+				<th colspan="2" class="nextDay">{% if next_month %}<a href="{% url calendar_month next_month.year next_month|date:"b" %}" class="next">Next Month</a>{% endif %}</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			{% for week in calendar %}
+			<tr class="{% if forloop.first %}first{% endif %}{% if forloop.last %}last{% endif %}">
+				{% for day in week %}
+				<td class="{% if forloop.first %}first {% endif %}{% if forloop.last %}last {% endif %}{% if not day.in_month %}otherMonth {% endif %}{% if day.today %}today {% endif %}{% if day.weekend %}weekend {% endif %}day" {% if not day.in_month %}ondblclick="window.location='{% url calendar_month day.day.year day.day|date:"b" %}'"{% else %}ondblclick="window.location='{% url calendar_day day.day.year day.day|date:"b" day.day.day %}'"{% endif %}>
+					<h3><a href="{% url calendar_day day.day.year day.day|date:"b" day.day.day %}">{{ day.day|date:"j" }}</a></h3>
+					{% if day.events %}
+						<ul>
+							{% for event in day.events|slice:":2" %}
+								<li><span class="time">{{ event.start_time|time:"P" }}</span> <a href="{{ event.get_absolute_url }}">{{ event|truncatewords:2 }}</a></li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

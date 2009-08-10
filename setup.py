@@ -14,7 +14,7 @@ setup(
 	author_email = 'me@mylesbraithwaite.com',
 	
 	description = 'A simple Calendar application for the Asgard CMS system.',
-	long_description = read('docs', 'intro.rst'),
+	#long_description = read('docs', 'intro.rst'),
 	
 	license = 'BSD License',
 	

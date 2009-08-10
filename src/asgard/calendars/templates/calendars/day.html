@@ -1,0 +1,47 @@
+{% extends "calendars/base_calendars.html" %}
+{% load humanize %}
+
+{% block title %}{{ block.super }} - Calendar for {{ date|naturalday|title }}{% endblock %}
+
+{% block content_title %}
+	<h2>{{ date|naturalday|title }}</h2>
+	<div class="meta">
+		<p><a href="{% url calendar_day prev_day.year prev_day|date:"b" prev_day.day %}">Previous Day</a> - <a href="{% url calendar_day next_day.year next_day|date:"b" next_day.day %}">Next Day</a></p>
+	</div>
+{% endblock %}
+
+{% block content %}
+	<table class="agenda">
+		<thead>
+			<tr>
+				<th>{{ date|date:"Y" }}</th>
+				<td>{{ date|date:"l, F j" }}</td>
+			</tr>
+		</thead>
+		<tbody>
+			{% for event in all_day %}
+			<tr class="all-day">
+				<th>all-day</th>
+				<td><a href="{{ event.get_absolute_url }}">{{ event.title }}</a></td>
+			</tr>
+			{% endfor %}
+			{% for time in agenda %}
+			<tr class="{% if time.working_hours %}working_hour{% endif %} {% if time.events %}event{% endif %}">
+				<a name="hour-{{ time.start|date:"H" }}"></a>
+				<th>{{ time.start|date:"g a" }}</th>
+				{% if time.events %}
+				{% for event in time.events %}
+				{% if not forloop.first %}
+			</tr>
+			<tr class="{% if time.working_hours %}working_hour{% endif %} {% if time.events %}event{% endif %}"><th></th>
+				{% endif %}
+					<td>{{ event.start_time|time:"g:i a"}} <a href="{{ event.get_absolute_url }}">{{ event.title }}</a></td>
+				{% endfor %}
+				{% else %}
+				<td></td>
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

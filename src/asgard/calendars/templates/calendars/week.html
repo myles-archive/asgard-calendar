@@ -1,0 +1,27 @@
+{% extends "calendars/base_calendars.html" %}
+
+{% block title %}{{ block.super }} - {{ date|date:"W \week o\f Y" }}{% endblock %}
+
+{% block content_title %}
+	<h2>{{ date|date:"W \week o\f Y" }}</h2>
+{% endblock %}
+
+{% block content %}
+	<table>
+		<thead>
+			<tr>
+				<th>
+			{% for weekday in weekdays %}
+				<th>{{ weekday.day|date:"D, N j" }}</th>
+			{% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+			{% for hour in hours %}
+				<tr>
+					<th>{{ hour|date:"g:i a" }}</th>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
