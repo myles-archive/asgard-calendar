@@ -1,8 +1,8 @@
 from django.conf.urls.defaults import patterns, url, include
 from django.contrib import admin
 
-from asgard.calendars.sitemaps import CalendarEventSitemap
-# from asgard.calendars.feeds import 
+from events.sitemaps import CalendarEventSitemap
+# from events.feeds import 
 
 admin.autodiscover()
 
@@ -14,7 +14,7 @@ urlpatterns = patterns('',
 	(r'^admin/', include(admin.site.urls)),
 	(r'^comments/', include('django.contrib.comments.urls')),
 	
-	(r'^calendar/', include('asgard.calendars.urls')),
+	(r'^calendar/', include('events.urls')),
 	
 	(r'^locations/', include('asgard.locations.urls')),
 	

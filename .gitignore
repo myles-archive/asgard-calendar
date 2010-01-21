@@ -1,11 +1,30 @@
+# Python stuff
 *.pyc
 *.pyo
-.installed.cfg
-bin
-develop-eggs
-dist
-downloads
-eggs
-parts
-*.egg-info
+
+# Mac OS X stuff
 .DS_Store
+
+# virtualenv stuff
+.Python
+bin/
+include/
+lib/
+src/
+
+# pip stuff
+pip-log.txt
+
+# Sphinx stuff
+docs/_build/
+
+# Eclipse stuff
+.project
+.pydevproject
+
+# TextMate stuff
+*.tmproj
+
+# setuptools stuff
+*.egg-info/
+dist/

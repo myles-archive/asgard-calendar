@@ -1,7 +1,7 @@
 [
 	{
 		"pk": 1,
-		"model": "calendars.event",
+		"model": "events.event",
 		"fields": {
 			"title": "The care and feeding of portable media players under Linux",
 			"slug": "gtalug-meeting",
@@ -19,7 +19,7 @@
 	},
 	{
 		"pk": 2,
-		"model": "calendars.event",
+		"model": "events.event",
 		"fields": {
 			"title": "GTALUG Soup",
 			"slug": "gtalug-soup",
@@ -37,7 +37,7 @@
 	},
 	{
 		"pk": 3,
-		"model": "calendars.event",
+		"model": "events.event",
 		"fields": {
 			"title": "GTALUG Beer",
 			"slug": "gtalug-beer",

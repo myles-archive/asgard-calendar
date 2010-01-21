@@ -1,6 +1,6 @@
 from django.contrib.sitemaps import Sitemap
 
-from asgard.calendars.models import Event
+from events.models import Event
 
 class CalendarEventSitemap(Sitemap):
 	changefreq = "never"

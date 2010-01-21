@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('asgard.calendars.views',
+urlpatterns = patterns('events.views',
 	url(r'^(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[-\w]+)/$',
 		view = 'detail',
 		name = 'calendar_event_detail',

@@ -5,8 +5,8 @@ from django.http import Http404, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from asgard.calendars.models import Event
-from asgard.calendars.forms import CalendarYearMonthForm
+from events.models import Event
+from events.forms import CalendarYearMonthForm
 
 def calendar_month(request, year=str(datetime.date.today().year),
 	month=datetime.date.today().strftime('%b').lower()):

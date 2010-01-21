@@ -11,10 +11,9 @@ from django.utils.translation import ugettext_lazy as _
 from tagging import register as tags_register
 from tagging.fields import TagField
 
-from asgard.calendars.managers import EventManager
+from events.managers import EventManager
 
 from asgard.utils.db.fields import MarkupTextField
-from asgard.locations.models import Location
 
 class Event(models.Model):
 	title = models.CharField(_('title'), max_length=200)
@@ -26,8 +25,7 @@ class Event(models.Model):
 	end_time = models.TimeField(_('end time'), blank=True, null=True)
 	cancel = models.BooleanField(_('cancel'), default=False)
 	
-	location = models.ForeignKey(Location, verbose_name='location', blank=True,
-		null=True)
+	location = models.TextField(_('location'), blank=True, null=True)
 	
 	allow_comments = models.BooleanField(_('allow comments'), default=True)
 	

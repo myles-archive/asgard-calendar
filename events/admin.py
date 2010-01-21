@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from asgard.calendars.models import Event
+from events.models import Event
 
 class EventAdmin(admin.ModelAdmin):
 	list_display = ('title', 'start_date', 'published')

@@ -16,6 +16,6 @@ INSTALLED_APPS = [
 	'tagging',
 	
 	'asgard.locations',
-	'asgard.calendars',
+	'events',
 ]
-ROOT_URLCONF = 'asgard.calendars.testurls'
+ROOT_URLCONF = 'events.testurls'
