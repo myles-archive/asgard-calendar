@@ -16,8 +16,6 @@ urlpatterns = patterns('',
 	
 	(r'^calendar/', include('events.urls')),
 	
-	(r'^locations/', include('asgard.locations.urls')),
-	
 	url(r'^feeds/(?P<url>.*)/$',
 		'django.contrib.syndication.views.feed',
 		{ 'feed_dict': feeds },
