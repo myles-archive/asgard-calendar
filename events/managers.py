@@ -12,7 +12,8 @@ class EventManager(Manager):
 		return self.get_query_set().filter(private=True, **kwargs)
 	
 	def published(self, **kwargs):
-		return self.get_query_set().filter(published__lte=datetime.now(), private=True, **kwargs)
+		return self.get_query_set().filter(private=True,
+			published__lte=datetime.now(), **kwargs)
 	
 	def search(self, search_terms):
 		terms = [term.strip() for term in search_terms.split()]
@@ -22,5 +23,7 @@ class EventManager(Manager):
 			q_objects.append(Q(title__icontains=term))
 			q_objects.append(Q(body_html__icontains=term))
 		
-		qs = self.get_query_set().filter(published__lte=datetime.now())
+		qs = self.get_query_set().filter(
+			published__lte=datetime.now())
+		
 		return qs.filter(reduce(operator.or_, q_objects))

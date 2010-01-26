@@ -6,9 +6,9 @@
 	<table class="calendar">
 		<thead>
 			<tr>
-				<th colspan="2" class="prevDay">{% if prev_month %}<a href="{% url calendar_month prev_month.year prev_month|date:"b" %}">Previous Month</a>{% endif %}</th>
+				<th colspan="2" class="prevDay">{% if prev_month %}<a href="{% url events_month prev_month.year prev_month|date:"b" %}">Previous Month</a>{% endif %}</th>
 				<th colspan="3" class="monthName"><h2>{{ month|date:"F" }}</h2></th>
-				<th colspan="2" class="nextDay">{% if next_month %}<a href="{% url calendar_month next_month.year next_month|date:"b" %}" class="next">Next Month</a>{% endif %}</th>
+				<th colspan="2" class="nextDay">{% if next_month %}<a href="{% url events_month next_month.year next_month|date:"b" %}" class="next">Next Month</a>{% endif %}</th>
 			</tr>
 			<tr class="dayName">
 			{% for day in headers %}
@@ -23,7 +23,7 @@
 			{% endfor %}
 			</tr>
 			<tr>
-				<th colspan="2" class="prevDay">{% if prev_month %}<a href="{% url calendar_month prev_month.year prev_month|date:"b" %}">Previous Month</a>{% endif %}</th>
+				<th colspan="2" class="prevDay">{% if prev_month %}<a href="{% url events_month prev_month.year prev_month|date:"b" %}">Previous Month</a>{% endif %}</th>
 				<th colspan="3" class="monthName">
 					<!--<h2>{{ month|date:"F" }}</h2>-->
 					<form action="." method="get" accept-charset="utf-8"><p>
@@ -49,15 +49,15 @@
 						<input type="submit" value="Go">
 					</p></form>
 				</th>
-				<th colspan="2" class="nextDay">{% if next_month %}<a href="{% url calendar_month next_month.year next_month|date:"b" %}" class="next">Next Month</a>{% endif %}</th>
+				<th colspan="2" class="nextDay">{% if next_month %}<a href="{% url events_month next_month.year next_month|date:"b" %}" class="next">Next Month</a>{% endif %}</th>
 			</tr>
 		</tfoot>
 		<tbody>
 			{% for week in calendar %}
 			<tr class="{% if forloop.first %}first{% endif %}{% if forloop.last %}last{% endif %}">
 				{% for day in week %}
-				<td class="{% if forloop.first %}first {% endif %}{% if forloop.last %}last {% endif %}{% if not day.in_month %}otherMonth {% endif %}{% if day.today %}today {% endif %}{% if day.weekend %}weekend {% endif %}day" {% if not day.in_month %}ondblclick="window.location='{% url calendar_month day.day.year day.day|date:"b" %}'"{% else %}ondblclick="window.location='{% url calendar_day day.day.year day.day|date:"b" day.day.day %}'"{% endif %}>
-					<h3><a href="{% url calendar_day day.day.year day.day|date:"b" day.day.day %}">{{ day.day|date:"j" }}</a></h3>
+				<td class="{% if forloop.first %}first {% endif %}{% if forloop.last %}last {% endif %}{% if not day.in_month %}otherMonth {% endif %}{% if day.today %}today {% endif %}{% if day.weekend %}weekend {% endif %}day" {% if not day.in_month %}ondblclick="window.location='{% url events_month day.day.year day.day|date:"b" %}'"{% else %}ondblclick="window.location='{% url events_day day.day.year day.day|date:"b" day.day.day %}'"{% endif %}>
+					<h3><a href="{% url events_day day.day.year day.day|date:"b" day.day.day %}">{{ day.day|date:"j" }}</a></h3>
 					{% if day.events %}
 						<ul>
 							{% for event in day.events|slice:":2" %}

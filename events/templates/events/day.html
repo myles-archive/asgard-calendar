@@ -6,7 +6,7 @@
 {% block content_title %}
 	<h2>{{ date|naturalday|title }}</h2>
 	<div class="meta">
-		<p><a href="{% url calendar_day prev_day.year prev_day|date:"b" prev_day.day %}">Previous Day</a> - <a href="{% url calendar_day next_day.year next_day|date:"b" next_day.day %}">Next Day</a></p>
+		<p><a href="{% url events_day prev_day.year prev_day|date:"b" prev_day.day %}">Previous Day</a> - <a href="{% url events_day next_day.year next_day|date:"b" next_day.day %}">Next Day</a></p>
 	</div>
 {% endblock %}
 

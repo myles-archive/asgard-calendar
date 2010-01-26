@@ -46,7 +46,7 @@ class Event(models.Model):
 	class Meta:
 		verbose_name = _('event')
 		verbose_name_plural = _('events')
-		db_table = 'calendar_events'
+		db_table = 'events'
 		unique_together = ('slug', 'start_date',)
 		ordering = ('-start_date', '-start_time')
 	
@@ -55,7 +55,7 @@ class Event(models.Model):
 	
 	@permalink
 	def get_absolute_url(self):
-		return ('calendar_event_detail', None, {
+		return ('events_event_detail', None, {
 			'slug':	self.slug,
 			'year': self.start_date.year,
 			'month': self.start_date.strftime('%b').lower(),

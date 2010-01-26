@@ -7,7 +7,7 @@ class CalendarEventSitemap(Sitemap):
 	priority = 1.0
 	
 	def items(self):
-		return Event.objects.all()
+		return Event.objects.public()
 	
 	def lastmod(self, obj):
 		return obj.date_modified
