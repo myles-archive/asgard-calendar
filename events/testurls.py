@@ -1,14 +1,18 @@
 from django.conf.urls.defaults import patterns, url, include
 from django.contrib import admin
 
-from events.sitemaps import CalendarEventSitemap
-# from events.feeds import 
+from events.sitemaps import EventsSitemap
+from events.feeds import EventsFeed
 
 admin.autodiscover()
 
-feeds = {}
+feeds = {
+	'calendar': EventsFeed,
+}
 
-sitemaps = {}
+sitemaps = {
+	'calendar': EventsSitemap,
+}
 
 urlpatterns = patterns('',
 	(r'^admin/', include(admin.site.urls)),

@@ -18,6 +18,7 @@ from asgard.utils.db.fields import MarkupTextField
 class Event(models.Model):
 	title = models.CharField(_('title'), max_length=200)
 	slug = models.SlugField(_('slug'), max_length=25)
+	author = models.ForeignKey(User)
 	
 	start_date = models.DateField(_('start date'))
 	start_time = models.TimeField(_('start time'), blank=True, null=True)

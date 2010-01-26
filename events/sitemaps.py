@@ -2,7 +2,7 @@ from django.contrib.sitemaps import Sitemap
 
 from events.models import Event
 
-class CalendarEventSitemap(Sitemap):
+class EventsSitemap(Sitemap):
 	changefreq = "never"
 	priority = 1.0
 	

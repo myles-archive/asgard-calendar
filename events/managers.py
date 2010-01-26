@@ -9,10 +9,10 @@ class EventManager(Manager):
 	"""
 	
 	def public(self, **kwargs):
-		return self.get_query_set().filter(private=True, **kwargs)
+		return self.get_query_set().filter(private=False, **kwargs)
 	
 	def published(self, **kwargs):
-		return self.get_query_set().filter(private=True,
+		return self.get_query_set().filter(private=False,
 			published__lte=datetime.now(), **kwargs)
 	
 	def search(self, search_terms):

@@ -5,6 +5,7 @@
 		"fields": {
 			"title": "The care and feeding of portable media players under Linux",
 			"slug": "gtalug-meeting",
+			"author": 1,
 			"start_date": "2009-08-11",
 			"start_time": "19:30",
 			"end_time": "21:00",
@@ -23,6 +24,7 @@
 		"fields": {
 			"title": "GTALUG Soup",
 			"slug": "gtalug-soup",
+			"author": 1,
 			"start_date": "2009-08-11",
 			"start_time": "18:00",
 			"end_time": "19:00",
@@ -41,6 +43,7 @@
 		"fields": {
 			"title": "GTALUG Beer",
 			"slug": "gtalug-beer",
+			"author": 1,
 			"start_date": "2009-08-11",
 			"start_time": "21:30",
 			"end_time": "23:30",
