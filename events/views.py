@@ -103,7 +103,7 @@ def calendar_month(request, year=str(datetime.date.today().year),
 		'is_archive': True,
 	}
 	
-	return render_to_response('calendars/month.html', payload, context_instance=RequestContext(request))
+	return render_to_response('events/month.html', payload, context_instance=RequestContext(request))
 
 def calendar_week(request, year=str(datetime.date.today().year),
 	week=str(datetime.date.today().isocalendar()[1])):
@@ -165,7 +165,7 @@ def calendar_week(request, year=str(datetime.date.today().year),
 		'hours': hours,
 	}
 	
-	return render_to_response('calendars/week.html', context_payload, context_instance=RequestContext(request))
+	return render_to_response('events/week.html', context_payload, context_instance=RequestContext(request))
 
 def calendar_year(request, year=str(datetime.date.today().year)):
 	events = Event.objects.filter(start_date__year=year)
@@ -181,7 +181,7 @@ def calendar_year(request, year=str(datetime.date.today().year)):
 		'year': year
 	}
 	
-	return render_to_response('calendars/year.html', context_payload, context_instance=RequestContext(request))
+	return render_to_response('events/year.html', context_payload, context_instance=RequestContext(request))
 
 def calendar_day(request, year=str(datetime.date.today().year),
 	month=datetime.date.today().strftime('%b').lower(),
@@ -234,7 +234,7 @@ def calendar_day(request, year=str(datetime.date.today().year),
 		'is_archive': True,
 	}
 	
-	return render_to_response('calendars/day.html', context_payload, context_instance=RequestContext(request))
+	return render_to_response('events/day.html', context_payload, context_instance=RequestContext(request))
 
 def detail(request, year, month, day, slug):
 	try:
@@ -247,4 +247,4 @@ def detail(request, year, month, day, slug):
 	except IndexError:
 		raise Http404
 	
-	return render_to_response('calendars/detail.html', { 'event': event, 'date': date }, context_instance=RequestContext(request))
+	return render_to_response('events/detail.html', { 'event': event, 'date': date }, context_instance=RequestContext(request))

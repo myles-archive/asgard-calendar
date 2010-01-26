@@ -8,8 +8,11 @@ class EventManager(Manager):
 	Same as above but for templates
 	"""
 	
+	def public(self, **kwargs):
+		return self.get_query_set().filter(private=True, **kwargs)
+	
 	def published(self, **kwargs):
-		return self.get_query_set().filter(published__lte=datetime.now(), **kwargs)
+		return self.get_query_set().filter(published__lte=datetime.now(), private=True, **kwargs)
 	
 	def search(self, search_terms):
 		terms = [term.strip() for term in search_terms.split()]

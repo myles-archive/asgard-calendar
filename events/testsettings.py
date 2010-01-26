@@ -15,7 +15,6 @@ INSTALLED_APPS = [
 	
 	'tagging',
 	
-	'asgard.locations',
 	'events',
 ]
 ROOT_URLCONF = 'events.testurls'
