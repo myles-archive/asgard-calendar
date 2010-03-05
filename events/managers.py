@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime
 import operator
 
 from django.db.models import Manager, Q
@@ -12,8 +12,9 @@ class EventManager(Manager):
 		"""
 		Upcoming events.
 		"""
+		TODAY = datetime.now()
 		return self.get_query_set().filter(private=False,
-			date__gte=date.today(), **kwargs).order_by('date')
+			star_date__gte=TODAY.date(), **kwargs).order_by('date')
 	
 	def public(self, **kwargs):
 		"""
