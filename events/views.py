@@ -8,8 +8,12 @@ from django.shortcuts import render_to_response
 from events.models import Event
 from events.forms import CalendarYearMonthForm
 
-def events_month(request, year=str(datetime.date.today().year),
-	month=datetime.date.today().strftime('%b').lower()):
+def events_month(request, year=None, month=None):
+	if not year:
+		year = str(datetime.date.today().year)
+	
+	if not month:
+		month = datetime.date.today().strftime('%b').lower()
 	
 	if request.GET:
 		new_data = request.GET.copy()
@@ -105,8 +109,12 @@ def events_month(request, year=str(datetime.date.today().year),
 	
 	return render_to_response('events/month.html', payload, context_instance=RequestContext(request))
 
-def events_week(request, year=str(datetime.date.today().year),
-	week=str(datetime.date.today().isocalendar()[1])):
+def events_week(request, year=None, week=None):
+	if not year:
+		year = str(datetime.date.today().year)
+	
+	if not week:
+		week = str(datetime.date.today().isocalendar()[1])
 	
 	try:
 		date = datetime.date(*time.strptime(year + '-0-' + week, '%Y-%w-%U')[:3])
@@ -167,25 +175,41 @@ def events_week(request, year=str(datetime.date.today().year),
 	
 	return render_to_response('events/week.html', context_payload, context_instance=RequestContext(request))
 
-def events_year(request, year=str(datetime.date.today().year)):
+def events_year(request, year=None):
+	if not year:
+		year = str(datetime.date.today().year)
+	
+	prev_year = year - 1
+	next_year = year + 1
+	
 	events = Event.objects.filter(start_date__year=year)
 	
 	months = []
 	
 	for i in range(1, 13):
-		months += [datetime.date(int(year), i, 1),]
+		month = datetime.date(int(year), i, 1)
+		events_count = Event.objects.filter(start_date__month=i, start_date__year=year).count()
+		months += [{'month': month, 'count': events_count},]
 	
 	context_payload = {
 		'events': events,
 		'months': months,
-		'year': year
+		'year': year,
+		'next_year': next_year,
+		'prev_year': prev_year
 	}
 	
 	return render_to_response('events/year.html', context_payload, context_instance=RequestContext(request))
 
-def events_day(request, year=str(datetime.date.today().year),
-	month=datetime.date.today().strftime('%b').lower(),
-	day=str(datetime.date.today().day)):
+def events_day(request, year=None, month=None, day=None):
+	if not year:
+		year = str(datetime.date.today().year)
+	
+	if not month:
+		month = datetime.date.today().strftime('%b').lower()
+	
+	if not day:
+		day = str(datetime.date.today().day)
 	
 	try:
 		date = datetime.date(*time.strptime(year+month+day, '%Y%b%d')[:3])
