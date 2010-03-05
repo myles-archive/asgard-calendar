@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 import operator
 
 from django.db.models import Manager, Q
@@ -8,14 +8,30 @@ class EventManager(Manager):
 	Same as above but for templates
 	"""
 	
+	def upcoming(self, **kwargs):
+		"""
+		Upcoming events.
+		"""
+		return self.get_query_set().filter(private=False,
+			date__gte=date.today(), **kwargs).order_by('date')
+	
 	def public(self, **kwargs):
+		"""
+		Public events.
+		"""
 		return self.get_query_set().filter(private=False, **kwargs)
 	
 	def published(self, **kwargs):
+		"""
+		Published events.
+		"""
 		return self.get_query_set().filter(private=False,
 			published__lte=datetime.now(), **kwargs)
 	
 	def search(self, search_terms):
+		"""
+		A simple ORM based search.
+		"""
 		terms = [term.strip() for term in search_terms.split()]
 		q_objects = []
 		
