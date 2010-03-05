@@ -14,7 +14,7 @@ class EventManager(Manager):
 		"""
 		TODAY = datetime.now()
 		return self.get_query_set().filter(private=False,
-			star_date__gte=TODAY.date(), **kwargs).order_by('date')
+			start_date__gte=TODAY.date(), **kwargs).order_by('date')
 	
 	def public(self, **kwargs):
 		"""
