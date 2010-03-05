@@ -4,7 +4,7 @@ from django import template
 from django.conf import settings
 from django.db import models
 
-Bookmark = models.get_model('events', 'event')
+Event = models.get_model('events', 'event')
 
 register = template.Library()
 
