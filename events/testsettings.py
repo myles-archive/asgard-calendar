@@ -13,7 +13,7 @@ INSTALLED_APPS = [
 	'django.contrib.sitemaps',
 	'django.contrib.humanize',
 	
-	'tagging',
+	'taggit',
 	
 	'events',
 ]

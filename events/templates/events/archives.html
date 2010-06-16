@@ -1,0 +1,27 @@
+{% extends "events/base_events.html" %}
+
+{% block title %}{{ block.super }}: Archives{% endblock %}
+
+{% block content_title %}
+	<h2>Archives</h2>
+{% endblock %}
+
+{% block content %}
+	<ul class="link_list">
+	{% for year, month_list in years %}
+		<li>{{ year }}:
+			<ul>
+			{% for month, has_link in month_list %}
+				<li>
+					{% if has_list %}
+					<a href="{% url events_month month|date:"Y" month|date:"b" %}">{{ month|date:"M" }}</a>
+					{% else %}
+					{{ month|date:"M" }}
+					{% endif %}
+				</li>
+			{% endfor %}
+			</ul>
+		</li>
+	{% endfor %}
+	</ul>
+{% endblock %}

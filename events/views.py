@@ -179,20 +179,22 @@ def events_year(request, year=None):
 	if not year:
 		year = str(datetime.date.today().year)
 	
-	prev_year = year - 1
-	next_year = year + 1
+	prev_year = int(year) - 1
+	next_year = int(year) + 1
 	
-	events = Event.objects.filter(start_date__year=year)
+	events = Event.objects.filter(start_date__year=year).dates('start_date', 'month')
 	
-	months = []
+	months = {}
 	
-	for i in range(1, 13):
-		month = datetime.date(int(year), i, 1)
-		events_count = Event.objects.filter(start_date__month=i, start_date__year=year).count()
-		months += [{'month': month, 'count': events_count},]
+	for i in events:
+		month = i.month
+		try:
+			months[month-1][1] = True
+		except KeyError:
+			months = [[ datetime.date(int(year), m, 1), False] for m in xrange(1, 13)]
+			months[month-1][1] = True
 	
 	context_payload = {
-		'events': events,
 		'months': months,
 		'year': year,
 		'next_year': next_year,
@@ -200,6 +202,23 @@ def events_year(request, year=None):
 	}
 	
 	return render_to_response('events/year.html', context_payload, context_instance=RequestContext(request))
+
+def events_archives(request):
+	events = Event.objects.dates('start_date', 'month')
+	
+	years = {}
+	
+	for i in events:
+		month = i.month
+		year = i.year
+		
+		try:
+			years[year][month-1][1] = True
+		except KeyError:
+			years[year] = [[ datetime.date(year, m, 1), False ] for m in xrange(1, 13) ]
+			years[year][month-1][1] = True
+	
+	return render_to_response('events/archives.html', { 'years': years }, context_instance=RequestContext(request))
 
 def events_day(request, year=None, month=None, day=None):
 	if not year:

@@ -3,8 +3,6 @@ from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.contrib.syndication.feeds import Feed, FeedDoesNotExist
 
-from tagging.models import TaggedItem, Tag
-
 from events.models import Event
 
 current_site = Site.objects.get_current()
@@ -33,7 +31,7 @@ class BaseFeed(Feed):
 		return reverse('events_index')
 	
 	def item_categories(self, item):
-		return item.tag_set.all()
+		return item.tags.all()
 	
 	def item_copyright(self, item):
 		return u"Copyright (c) %s, %s %s" % (current_site.name, item.author.first_name, item.author.last_name)

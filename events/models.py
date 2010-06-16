@@ -8,8 +8,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.comments.models import Comment
 from django.utils.translation import ugettext_lazy as _
 
-from tagging import register as tags_register
-from tagging.fields import TagField
+from taggit.managers import TaggableManager
 
 from events.managers import EventManager
 
@@ -30,7 +29,7 @@ class Event(models.Model):
 	
 	allow_comments = models.BooleanField(_('allow comments'), default=True)
 	
-	tags = TagField()
+	tags = TaggableManager()
 	
 	body = MarkupTextField(_('body'))
 	
@@ -105,5 +104,14 @@ class Event(models.Model):
 			return None
 		
 		return u"%s:%s" % (length.hours, length.minutes)
-
-tags_register(Event, 'tag_set')
+	
+	def _get_tags(self):
+		tag_string = ''
+		for t in self.tags.all():
+			link = '<a href="./?tags__id__exact=%s" title="Show all post under %s tag">%s</a>' % (t.slug, t.name, t.name)
+			link = u"%s" % t.name
+			tag_string = ''.join([tag_string, link, ', '])
+		return tag_string.rstrip(', ')
+	
+	_get_tags.short_description = _('Tags')
+	_get_tags.allow_tags = True

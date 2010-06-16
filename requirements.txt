@@ -1,5 +1,4 @@
 python-dateutil
-
--e svn+http://django-tagging.googlecode.com/svn/trunk/#egg=tagging
+django-taggit
 
 -e git+git://github.com/asgardproject/asgard-utils.git#egg=Asgard-Utils
