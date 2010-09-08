@@ -1,4 +1,3 @@
 python-dateutil
 django-taggit
-
--e git+git://github.com/asgardproject/asgard-utils.git#egg=Asgard-Utils
+django-markup

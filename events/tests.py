@@ -2,14 +2,13 @@ from django.test import Client
 from django.core.urlresolvers import reverse
 
 from events.models import Event
-from tagging.models import Tag
 
 from django.test import TestCase
 
 client = Client()
 
 class EventsTestCase(TestCase):
-	fixtures = ['events',]
+	fixtures = ['auth', 'events',]
 	
 	def setUp(self):
 		self.event = Event.objects.get(pk=3)
@@ -53,5 +52,5 @@ class EventsTestCase(TestCase):
 		self.assertEquals(response.status_code, 200)
 	
 	def testEventsEventFeed(self):
-		response = client.get(reverse('feeds', args=['calendar']))
+		response = client.get(reverse('events_feed'))
 		self.assertEquals(response.status_code, 200)

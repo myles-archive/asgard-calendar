@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-	{% load humanize %}
+	{% load humanize markup_tags %}
 
 	<table border="0">
 		<thead>
@@ -17,7 +17,7 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="2">{{ event.body_html|safe }}</td>
+				<td colspan="2">{{ event.body|apply_markup:event.markup }}</td>
 			</tr>
 		</tfoot>
 		<tbody>

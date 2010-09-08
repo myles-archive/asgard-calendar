@@ -10,9 +10,12 @@ from django.utils.translation import ugettext_lazy as _
 
 from taggit.managers import TaggableManager
 
-from events.managers import EventManager
+try:
+	from django_markup.fields import MarkupField
+except ImportError:
+	MarkupField = False
 
-from asgard.utils.db.fields import MarkupTextField
+from events.managers import EventManager
 
 class Event(models.Model):
 	title = models.CharField(_('title'), max_length=200)
@@ -31,7 +34,10 @@ class Event(models.Model):
 	
 	tags = TaggableManager()
 	
-	body = MarkupTextField(_('body'))
+	body = models.TextField(_('body'))
+	
+	if MarkupField:
+		markup = MarkupField(default='none')
 	
 	published = models.DateTimeField(_('published'), blank=True, null=True)
 	date_added = models.DateTimeField(_('date added'), auto_now_add=True)
@@ -52,6 +58,14 @@ class Event(models.Model):
 	
 	def __unicode__(self):
 		return u"%s" % self.title
+	
+	def save(self, *args, **kwargs):
+		if not self.end_date:
+			self.end_date = self.start_date
+		if not self.end_time:
+			self.end_time = self.start_time
+		
+		super(Event, self).save(*args, **kwargs)
 	
 	@permalink
 	def get_absolute_url(self):

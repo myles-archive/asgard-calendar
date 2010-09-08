@@ -1,1 +1,2 @@
-<div class="entry-content">{{ obj.body_html|safe }}</div>
+{% load markup_tags %}
+<div class="entry-content">{{ obj.body|apply_markup:obj.markup }}</div>

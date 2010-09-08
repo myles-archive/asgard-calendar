@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 import operator
 
 from django.db.models import Manager, Q
@@ -12,9 +12,9 @@ class EventManager(Manager):
 		"""
 		Upcoming events.
 		"""
-		TODAY = datetime.now()
+		TODAY = datetime.date.today()
 		return self.get_query_set().filter(private=False,
-			start_date__gte=TODAY.date(), **kwargs).order_by('start_date')
+			start_date__gte=TODAY, **kwargs).order_by('start_date', 'start_time')
 	
 	def public(self, **kwargs):
 		"""
@@ -27,7 +27,7 @@ class EventManager(Manager):
 		Published events.
 		"""
 		return self.get_query_set().filter(private=False,
-			published__lte=datetime.now(), **kwargs)
+			published__lte=datetime.datetime.now(), **kwargs)
 	
 	def search(self, search_terms):
 		"""
@@ -38,7 +38,7 @@ class EventManager(Manager):
 		
 		for term in terms:
 			q_objects.append(Q(title__icontains=term))
-			q_objects.append(Q(body_html__icontains=term))
+			q_objects.append(Q(body__icontains=term))
 		
 		qs = self.get_query_set().filter(
 			published__lte=datetime.now())

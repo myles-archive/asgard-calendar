@@ -9,9 +9,9 @@ Requirements
  * Django_ >= 1.1
  * `Django Taggit`_ >= 0.4.0
  * `Python DateUtil`_ >= 1.5
- * `Asgard Utilities`_ == trunk
+ * `Django Markup`_ >= 0.3.0
 
 .. _Django: http://djangoproject.org/
 .. _Django Taggit: http://pypi.python.org/pypi/django-taggit
-.. _Asgard Utilities: http://github.com/asgardproject/asgard-utils
+.. _Django Markup: http://pypi.python.org/pypi/django-markup
 .. _DateUtil: http://labix.org/python-dateutil
