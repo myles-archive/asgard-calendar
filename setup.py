@@ -68,6 +68,8 @@ setup(
 	
 	install_requires = [
 		'distribute',
+		'icalendar',
+		'python-dateutil'
 	],
 	
 	classifiers = [
