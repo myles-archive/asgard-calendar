@@ -10,8 +10,10 @@ Requirements
  * `Django Taggit`_ >= 0.4.0
  * `Python DateUtil`_ >= 1.5
  * `Django Markup`_ >= 0.3.0
+ * iCalendar_ >= 2.1
 
 .. _Django: http://djangoproject.org/
 .. _Django Taggit: http://pypi.python.org/pypi/django-taggit
 .. _Django Markup: http://pypi.python.org/pypi/django-markup
 .. _DateUtil: http://labix.org/python-dateutil
+.. _iCalendar: http://pypi.python.org/pypi/icalendar/
