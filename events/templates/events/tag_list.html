@@ -1,0 +1,15 @@
+{% extends "events/base_events.html" %}
+
+{% block title %}{{ block.super }}: Calendar Tags{% endblock %}
+
+{% block content_title %}
+	<h2>Calendar Tags</h2>
+{% endblock %}
+
+{% block content %}
+	<ul id="events_tags" class="tag_cloud">
+		{% for tag in tags %}
+			<li><a href="{% url events_tag_detail tag.slug %}" rel="tag">{{ tag }}</a></li>
+		{% endfor %}
+	</ul>
+{% endblock %}

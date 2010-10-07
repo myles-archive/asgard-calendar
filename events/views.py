@@ -1,12 +1,14 @@
 import datetime
 import time
 
-from django.http import Http404, HttpResponse
 from django.template import RequestContext
+from django.http import Http404, HttpResponse
 from django.shortcuts import render_to_response
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 from events.models import Event
 from events.forms import CalendarYearMonthForm
+from events.utils import export_ical
 
 def events_month(request, year=None, month=None):
 	if not year:
@@ -291,3 +293,77 @@ def detail(request, year, month, day, slug):
 		raise Http404
 	
 	return render_to_response('events/detail.html', { 'event': event, 'date': date }, context_instance=RequestContext(request))
+
+def detail_ical(request, year, month, day, slug):
+	try:
+		date = datetime.date(*time.strptime(year+month+day, '%Y%b%d')[:3])
+	except ValueError:
+		raise Http404
+	
+	try:
+		event = Event.objects.get(start_date=date, slug__iexact=slug)
+	except IndexError:
+		raise Http404
+	
+	icalendar = export_ical([event, ])
+	
+	response = HttpResponse(icalendar.as_string(), mimetype="text/calendar")
+	response['Content-Disposition'] = 'attachment: filename=%s-%s.ics' % (event.start_date.isoformat(), event.slug)
+	
+	return response
+
+def ical(request):
+	TODAY = datetime.date.today()
+	THRIDY_DAYS = datetime.timedelta(days=30)
+	
+	FUTURE = TODAY + THRIDY_DAYS
+	PAST = TODAY - THRIDY_DAYS
+	
+	event_list = Event.objects.filter(start_date__lte=FUTURE, start_date__gte=PAST)
+	
+	icalendar = export_ical(event_list)
+	
+	response = HttpResponse(icalendar.as_string(), mimetype="text/calendar")
+	response['Content-Disposition'] = 'attachment: filename=%s-%s.ics' % (FUTURE.isoformat(), PAST.isoformat())
+	
+	return response
+
+def tag_list(request):
+	tags = Event.tags.all()
+	
+	context = {
+		'tags': tags,
+		'is_archive': True
+	}
+	
+	return render_to_response('events/tag_list.html', context, context_instance=RequestContext(request))
+
+def tag_detail(request, slug, page=1):
+	tag = Event.tags.get(slug=slug)
+	event_list = Event.objects.filter(tags__in=[tag])
+	
+	paginator = Paginator(event_list, 10)
+	
+	try:
+		events = paginator.page(page)
+	except (EmptyPage, InvalidPage):
+		events = paginator.page(paginator.num_pages)
+	
+	context = {
+		'tag': tag,
+		'events': events,
+		'is_archive': True
+	}
+	
+	return render_to_response('events/tag_detail.html', context, context_instance=RequestContext(request))
+
+def tag_detail_ical(request, slug):
+	tag = Event.tags.get(slug=slug)
+	event_list = Event.objects.upcoming(tags__in=[tag])[:10]
+	
+	icalendar = export_ical(event_list)
+	
+	response = HttpResponse(icalendar.as_string(), mimetype="text/calendar")
+	response['Content-Disposition'] = 'attachment: filename=%s.ics' % slug
+	
+	return response

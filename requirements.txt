@@ -1,3 +1,4 @@
 python-dateutil
 django-taggit
 django-markup
+icalendar

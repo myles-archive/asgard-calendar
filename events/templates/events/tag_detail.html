@@ -1,0 +1,37 @@
+{% extends "events/base_events.html" %}
+
+{% block title %}{{ block.super }}: Events Tag {{ tag }}{% endblock %}
+
+{% block content_title %}
+	<h2>Events <a href="{% url events_tag_list %}">Tag</a> {{ tag }}</h2>
+{% endblock %}
+
+{% block content %}
+	<ul class="link_list">
+		{% for event in events.object_list %}
+		<li><a href="{{ event.get_absolute_url }}">{{ event }}</a></li>
+		{% endfor %}
+	</ul>
+	
+	{% if has_other_pages %}
+		<ul id="pagination">
+			{% if has_previous %}
+				<li class="previous on"><a href="{% url events_tag_detail_paginated event.previous_page_number %}" title="Page {{ events.previous_page_number }}">Previous</a></li>
+			{% else %}
+				<li class="previous off">Previous</li>
+			{% endif %}
+			{% for page in posts.page_range %}
+				{% ifequal page posts.page_number %}
+					<li class="active">{{ page }}</li>
+				{% else %}
+					<li><a href="{% url events_tag_detail_paginated page %}">{{ page }}</a></li>
+				{% endifequal %}
+			{% endfor %}
+			{% if has_next %}
+				<li class="next on"><a href="{% url events_tag_detail_paginated posts.next_page_number %}" title="Page {{ events.next_page_number }}">Next</a></li>
+			{% else %}
+				<li class="next off">Next</li>
+			{% endif %}
+		</ul>
+	{% endif %}
+{% endblock %}

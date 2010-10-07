@@ -76,6 +76,15 @@ class Event(models.Model):
 			'day': self.start_date.day,
 		})
 	
+	@permalink
+	def get_ical_url(self):
+		return ('events_event_detail_ical', None, {
+			'slug':	self.slug,
+			'year': self.start_date.year,
+			'month': self.start_date.strftime('%b').lower(),
+			'day': self.start_date.day,
+		})
+	
 	@property
 	def start_datetime(self):
 		if self.start_time:

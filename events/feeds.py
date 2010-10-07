@@ -46,10 +46,13 @@ class EventsFeed(BaseFeed):
 	title = u"%s: events calendar." % current_site.name
 	
 	def link(self):
-		return reverse('events_index') + "?utm_source=feedreader&utm_medium=feed&utm_campaign=EventsFeed"
+		return reverse('events_index')
 	
 	def items(self):
-		return Event.objects.published()[:10]
+		return Event.objects.upcoming()[:10]
 	
 	def item_link(self, item):
-		return item.get_absolute_url() + "?utm_source=feedreader&utm_medium=feed&utm_campaign=EventsFeed"
+		return item.get_absolute_url()
+	
+	def item_enclosure_url(self, item):
+		return "http://%s%s" % (current_site.domain, item.get_ical_url())
